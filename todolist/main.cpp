@@ -6,9 +6,9 @@ using namespace std;
 class manager
 {   public:
     vector<string> tasks;
-    vector<int> Dtsaved;
+    vector<int> dtSaved;
+    vector<int>monthSaved;
     vector<int> hour;
-    vector<int>::iterator it;
     vector<int> min;
 };
 class propeties:public manager
@@ -17,12 +17,20 @@ class propeties:public manager
     void update();
     void del();
     void display();
+
+    void displayReport();
+
 };
+
 
 
 
 void propeties::add(string s)
 {   int hours,minutes;
+    time_t now = time(0);
+     tm *ltm = localtime(&now);
+    dtSaved.push_back(ltm->tm_mday);
+    monthSaved.push_back(ltm->tm_mon);
     tasks.push_back(s);
     cout<<"\nEnter time"<<endl;
     cout<<"\nHours=";
@@ -31,6 +39,7 @@ void propeties::add(string s)
     cin>>minutes;
     hour.push_back(hours);
     min.push_back(minutes);
+
     }
 void propeties::display()
 {
@@ -41,7 +50,10 @@ void propeties::display()
         cout<<"\n********************************************************************************************"<<endl;}
     }
 void propeties::update()
-{ int taskno,t;
+{
+    time_t now = time(0);
+     tm *ltm = localtime(&now);
+     int taskno,t;
   string s;
   display();
   cout<<"\nwhich one do you want to update?"<<endl;
@@ -52,9 +64,12 @@ void propeties::update()
   cout<<"\nEnter new time hour"<<endl;
   cin>>t;
   hour[taskno-1]=t;
-  cout<<"\nEnter new time minutes"<<endl;
+  cout<<"\nEnter new ti me minutes"<<endl;
   cin>>t;
   min[taskno-1]=t;
+  dtSaved[taskno-1]=ltm->tm_mday;
+  monthSaved[taskno-1]=ltm->tm_mon;
+
 
 }
 void propeties::del()
@@ -71,15 +86,16 @@ void propeties::del()
     if(a=='y')
     {tasks.erase(tasks.begin()+taskno);
      hour.erase(hour.begin()+taskno);
-      min.erase(min.begin()+taskno);}
+      min.erase(min.begin()+taskno);
+      dtSaved.erase(dtSaved.begin()+taskno);
+      monthSaved.erase(monthSaved.begin()+taskno);}
     else{return;}
 
 }
 
 int main()
 {
-    //time_t now = time(0);
-    //tm *ltm = localtime(&now);
+
     int options;
     string task;
     propeties p;
